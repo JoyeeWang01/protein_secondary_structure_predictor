@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<title>DSSP Predictor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+<script type="text/javascript" src="script.js"></script>
+
+<header class="w3-container w3-teal">
+  <h1>Protein Secondary Structure Predictor</h1>
+</header>
+
+<div class="w3-container">
+  <p><b>Enter your amino acid sequence here</b></p>
+  <p>Minimum length is 3 and maximum length is 256, so only the first 256 amino acids will be read if you enter more than that</p>
+  <p>Nonstandard amino acids (B, O, U, X, and Z) will be represented by *</p>
+    <p>
+        <input id= "aaInput" class="w3-input w3-animate-input" placeholder="Sequence.." name="sequence" type="text" style="width:135px"><br>
+        <button onclick="predictClick()" class="w3-btn w3-red" onClick="getcube()">Predict</button>
+        <button onclick="deleteClick()" class="w3-btn w3-black">Delete</button>
+    </p>
+  <div id="dsspOutput" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom" style="width:600px">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('dsspOutput').style.display='none'" class="w3-button w3-large w3-red w3-display-topright" title="Close">&times;</span>
+      </div>
+
+      <div class="w3-container">
+        <div class="w3-section">
+          <label><b>Your amino acid sequence:</b></label>
+          <p id="displayInput" class="w3-container"></p>
+          <label><b>Predicted secondary structure:</b></label>
+          <p id="displayOutput" class="w3-container"></p>
+          <canvas id="img" width="560" height="200"></canvas><br>
+          <label><b>C:</b></label>
+          <img src="C.jpg" id="C" width="20" height="20">
+          <label><b>H:</b></label>
+          <img src="H.jpg" id="H" width="20" height="20">
+          <label><b>E:</b></label>
+          <img src="E.jpg" id="E" width="20" height="20">
+        </div>
+      </div>
+      <div class="center w3-container w3-border-top padding-5 w3-light-grey">
+        <button onclick="copyClick()" type="button" class="w3-button w3-red">Copy result to clipboard</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="errorMsg" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom" style="width:600px">
+      <div class="w3-container w3-red w3-center">
+        <h2>Invalid Input</h2>
+      </div>
+      <div class="center w3-container">
+        <p>Please include only amino acid letters with length longer than 3</p>
+      </div>
+      <div class="center w3-container w3-border-top padding-5 w3-light-grey">
+        <button onclick="document.getElementById('errorMsg').style.display='none'" type="button" class="w3-button w3-red">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
