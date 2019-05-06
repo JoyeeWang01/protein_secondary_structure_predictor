@@ -7,11 +7,53 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
 <script type="text/javascript" src="script.js"></script>
 
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-left w3-black" style="display:none" id="mySidebar">
+  <button class="w3-bar-item w3-button w3-large"
+  onclick="closeTab()">Close &times;</button>
+  <a href="#" class="w3-bar-item w3-button" onclick="openInfo('predictor')">Predictor</a>
+  <a href="#" class="w3-bar-item w3-button" onclick="openInfo('use')">How to Use it</a>
+  <a href="#" class="w3-bar-item w3-button" onclick="openInfo('structure')">About Protein Structures</a>
+  <a href="#" class="w3-bar-item w3-button" onclick="openInfo('algorithm')">About Algorithm</a>
+</div>
+
+<div id="main">
 <header class="w3-container w3-teal">
-  <h1>Protein Secondary Structure Predictor</h1>
+  <button id="openNav" class="w3-button w3-teal w3-large" onclick="openTab()">&#9776;</button>
+  <h1>Protein Secondary Structure Prediction</h1>
 </header>
 
-<div class="w3-container">
+<div id="algorithm" class="w3-container" style="display:none">
+  <p>The predictor was trained using Bidirectional LSTM (Long Short-Term Memory), which is a kind of Recurrent Neural Network. It is useful for sequential data such that outputs of nearby amino acids in a sequence will have an influence on each other.</p>
+  <img src="lstm.png" width="395" height="276"><br>
+  <p>The dataset contains more than 394k amino acid sequences and their corresponding secondary structures.</p>
+  <p>The accuracy of the predictor is 85%.</p>
+  <a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21">Click here for further reading materials.</a>
+</div>
+
+<div id="use" class="w3-container" style="display:none">
+  <p>Amino acid sequence should be entered according to the one-letter codes.</p>
+  <img src="aa_abbr.jpg" width="276" height="360"><br>
+  <p>The output will be their secondary structure represented by eight letters using DSSP (Define Secondary Structure of Proteins).<br />
+    &nbsp;&nbsp;&nbsp;G = 3-turn helix. Min length 3 residues<br />
+    &nbsp;&nbsp;&nbsp;H = 4-turn helix (&alpha; helix). Minimum length 4 residues<br />
+    &nbsp;&nbsp;&nbsp;I = 5-turn helix (&piv; helix). Minimum length 5 residues<br />
+    &nbsp;&nbsp;&nbsp;T = hydrogen bonded turn (3, 4, or 5 turns)<br />
+    &nbsp;&nbsp;&nbsp;E = extended strand in parallel and/or anti-parallel &beta;-sheet conformation. Min length 2 residues<br />
+    &nbsp;&nbsp;&nbsp;B = residue in isolated &beta;-bridge (single pair &beta;-sheet hydrogen bond formation)<br />
+    &nbsp;&nbsp;&nbsp;S = bend (the only non-hydrogen-bond based assignment)<br />
+    &nbsp;&nbsp;&nbsp;C = coil (residues which are not in any of the above conformations)</p>
+  <p>We merge (E, B) into E, (H, G, I) into H, and (C, S, T) into C so that the ouput will only contain these three letters to represent more generalized structures.</p>
+  <a href="https://www.blopig.com/blog/2014/08/dssp/">Click here for further reading materials.</a>
+</div>
+
+<div id="structure" class="w3-container" style="display:none">
+  <p>Proteins have four levels of structure: primary, secondary, tertiary, and quaternary.</p>
+  <p>This program predicts only the secondary structure what refers to local folded structures that form within a polypeptide due to interactions between atoms of the backbone.</p>
+  <img src="structures.png" height="382" width="300"><br>
+  <a href="https://www.khanacademy.org/science/biology/macromolecules/proteins-and-amino-acids/a/orders-of-protein-structure">Click here for further reading materials.</a>
+</div>
+
+<div id="predictor" class="w3-container">
   <p><b>Enter your amino acid sequence here</b></p>
   <p>Minimum length is 3 and maximum length is 256, so only the first 256 amino acids will be read if you enter more than that</p>
   <p>Nonstandard amino acids (B, O, U, X, and Z) will be represented by *</p>
@@ -21,25 +63,25 @@
         <button onclick="deleteClick()" class="w3-btn w3-black">Delete</button>
     </p>
   <div id="dsspOutput" class="w3-modal">
-    <div class="w3-modal-content w3-animate-zoom" style="width:600px">
+    <div class="w3-modal-content w3-animate-zoom">
 
       <div class="w3-center"><br>
         <span onclick="document.getElementById('dsspOutput').style.display='none'" class="w3-button w3-large w3-red w3-display-topright" title="Close">&times;</span>
       </div>
 
       <div class="w3-container">
-        <div class="w3-section">
+        <div id = "show" class="w3-section">
           <label><b>Your amino acid sequence:</b></label>
           <p id="displayInput" class="w3-container"></p>
           <label><b>Predicted secondary structure:</b></label>
           <p id="displayOutput" class="w3-container"></p>
-          <canvas id="img" width="560" height="200"></canvas><br>
+          <canvas id="img" width="540" height="200"></canvas><br>
           <label><b>C:</b></label>
-          <img src="C.jpg" id="C" width="20" height="20">
+          <img src="C.jpg" id="C" width="20" height="20">&nbsp;&nbsp;
           <label><b>H:</b></label>
-          <img src="H.jpg" id="H" width="20" height="20">
+          <img src="H.jpg" id="H" width="20" height="20">&nbsp;&nbsp;
           <label><b>E:</b></label>
-          <img src="E.jpg" id="E" width="20" height="20">
+          <img src="E.jpg" id="E" width="20" height="20">&nbsp;&nbsp;
         </div>
       </div>
       <div class="center w3-container w3-border-top padding-5 w3-light-grey">
@@ -61,6 +103,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 
 </body>
