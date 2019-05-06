@@ -1,6 +1,29 @@
 var firstTime = true;
 var model;
 
+function openTab() {
+  document.getElementById("main").style.marginLeft = "20%";
+  document.getElementById("mySidebar").style.width = "20%";
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("openNav").style.display = 'none';
+}
+
+function closeTab() {
+  document.getElementById("main").style.marginLeft = "0%";
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("openNav").style.display = "inline-block";
+}
+
+function openInfo(e) {
+    var names = ["predictor", "use", "structure", "algorithm"];
+    for (var v=0; v<4; v++) {
+        if (e != names[v]) {
+            document.getElementById(names[v]).style.display = "none";
+        }
+    }
+    document.getElementById(e).style.display = "block";
+}
+
 function copyClick () {
    // Create new element
    var el = document.createElement('textarea');
@@ -44,7 +67,6 @@ function predictClick() {
                 var prediction = loaded.predict(result);
                 formatOutput(prediction).then (predicted => {
                     predicted = predicted.toUpperCase();
-                    draw(predicted);
                     var new_break2 = "";
                     var i = 0;
                     for (var v = 0; v < predicted.length; v++) {
@@ -55,6 +77,7 @@ function predictClick() {
                     document.getElementById('displayInput').innerHTML = new_break1;
                     document.getElementById('displayOutput').innerHTML = new_break2;
                     document.getElementById('dsspOutput').style.display = 'block';
+                    draw(predicted);
                 });
                 return loaded;
             });
@@ -64,7 +87,6 @@ function predictClick() {
                 prediction = loaded.predict(result);
                 formatOutput(prediction).then (predicted => {
                     predicted = predicted.toUpperCase();
-                    draw(predicted);
                     var new_break2 = "";
                     var i = 0;
                     for (var v = 0; v < predicted.length; v++) {
@@ -75,6 +97,7 @@ function predictClick() {
                     document.getElementById('displayInput').innerHTML = new_break1;
                     document.getElementById('displayOutput').innerHTML = new_break2;
                     document.getElementById('dsspOutput').style.display = 'block';
+                    draw(predicted);
                 });
             });
         }
@@ -83,6 +106,13 @@ function predictClick() {
 
 function draw(seqs) {
     var img = document.getElementById("img");
+    img.width = document.getElementById('show').offsetWidth;
+    var mod = img.width%20;
+    var row = (img.width-mod)/20;
+    mod = seqs.length/row;
+    var col = (seqs.length-mod)/row;
+    if (mod != 0) {col++;}
+    img.height = 20*col;
     var c = document.getElementById("C");
     var e = document.getElementById("E");
     var h = document.getElementById("H");
@@ -91,7 +121,7 @@ function draw(seqs) {
     var curr_y = 0;
     ctx.clearRect(0, 0, img.width, img.height);
     for (var v = 0; v < seqs.length; v++) {
-        if ((v!=0)&&(v%28 == 0)) {curr_x = 0; curr_y += 20;}
+        if ((v != 0)&&(v%row == 0)) {curr_x = 0; curr_y += 20;}
         if (seqs[v] == 'C') {
             ctx.drawImage(c, curr_x, curr_y, 20, 20);
             curr_x += 20;
